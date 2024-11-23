@@ -1,0 +1,54 @@
+{
+  "groups": [
+    {
+      "name": "kaptcha",
+      "type": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "kaptcha.image-heigth",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "defaultValue": 40
+    },
+    {
+      "name": "kaptcha.image-width",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "defaultValue": 100
+    },
+    {
+      "name": "kaptcha.noise-impl",
+      "type": "java.lang.String",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "defaultValue": "com.google.code.kaptcha.impl.NoNoise"
+    },
+    {
+      "name": "kaptcha.textproducer-char-length",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "defaultValue": 4
+    },
+    {
+      "name": "kaptcha.textproducer-char-string",
+      "type": "java.lang.String",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "defaultValue": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYAZ"
+    },
+    {
+      "name": "kaptcha.textproducer-font-color",
+      "type": "java.lang.String",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "defaultValue": "0,0,0"
+    },
+    {
+      "name": "kaptcha.textproducer-font-size",
+      "type": "java.lang.Integer",
+      "sourceType": "cn.edu.ncut.cs.springboot.kaptcha.config.KaptchaProperties",
+      "defaultValue": 32
+    }
+  ],
+  "hints": []
+}
