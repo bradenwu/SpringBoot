@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.ncut.cs.springboot.springbootmybatisplus.mapper.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.edu.ncut.cs.springboot.springbootmybatisplus.entity.Order">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="order_item_id" property="orderItemId" />
+        <result column="product_id" property="productId" />
+        <result column="address_id" property="addressId" />
+        <result column="total_price" property="totalPrice" />
+        <result column="total_count" property="totalCount" />
+        <result column="order_time" property="orderTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, order_item_id, product_id, address_id, total_price, total_count, order_time
+    </sql>
+
+</mapper>
