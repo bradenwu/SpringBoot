@@ -1,7 +1,10 @@
-package cn.edu.ncut.cs.springboot.springsecuritydemo.dao;
+package cn.edu.ncut.cs.springboot.springsecuritydemo.repository;
 
 import cn.edu.ncut.cs.springboot.springsecuritydemo.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoleDao extends JpaRepository<Role, Long> {
+import java.util.List;
+
+public interface RoleRepository extends JpaRepository<Role, Long> {
+    List<Role> getRolesById(Long id);
 }
