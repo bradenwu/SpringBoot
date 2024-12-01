@@ -6,5 +6,5 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 public interface RoleService {
-    List<Role> getRoles(@NonNull Long userId);
+    List<Role> getRoles(@NonNull Long id);
 }

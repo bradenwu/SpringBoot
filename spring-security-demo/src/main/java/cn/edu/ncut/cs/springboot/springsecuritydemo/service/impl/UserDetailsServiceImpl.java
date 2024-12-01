@@ -1,12 +1,8 @@
 package cn.edu.ncut.cs.springboot.springsecuritydemo.service.impl;
 
-import cn.edu.ncut.cs.springboot.springsecuritydemo.entity.Permission;
-import cn.edu.ncut.cs.springboot.springsecuritydemo.entity.Role;
-import cn.edu.ncut.cs.springboot.springsecuritydemo.entity.User;
-import cn.edu.ncut.cs.springboot.springsecuritydemo.service.PermissionService;
-import cn.edu.ncut.cs.springboot.springsecuritydemo.service.RoleService;
-import cn.edu.ncut.cs.springboot.springsecuritydemo.service.UserService;
-import jakarta.annotation.Resource;
+import cn.edu.ncut.cs.springboot.springsecuritydemo.entity.*;
+import cn.edu.ncut.cs.springboot.springsecuritydemo.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,48 +16,68 @@ import java.util.Optional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Resource
+    @Autowired
     private UserService userService;
-    @Resource
-    private RoleService roleService;
-    @Resource
-    private PermissionService permissionService;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RolePermissionService rolePermissionService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userService.getByUsername(username);
-        return user.map(u -> {
-            List<Role> roles = roleService.getRoles(u.getId());
-            //注意教材此处代码有误，修正为下面的代码            List<Permission> permissions = permissionService.getPermissions(u.getId());
-            List<Permission> permissions = roles.stream()
-                    .flatMap(role -> permissionService.getPermissions(role.getId()).stream())
-                    .toList();
-            List<GrantedAuthority> grantedAuthorities = new ArrayList<>(roles.size() + permissions.size());
-            /*在Spring Security中，角色和权限统称为GrantAuthority，角色和权限都交给GrantAuthenty管理，而区分角色和权限的方式，就是在角色名称前加前缀ROLE_以表示角色*/
-            // 将角色信息转换为SimpleGrantedAuthority对象类型
-            List<SimpleGrantedAuthority> roleAuthorities = roles.stream()
-                    //给角色名称增加前缀ROLE_
-                    .map(role -> "ROLE_" + role.getName())
-                    .map(SimpleGrantedAuthority::new)
-                    .toList();
-            // 将授权许可信息转换为SimpleGrantedAuthority对象类型
-            List<SimpleGrantedAuthority> permissionAuthorities = permissions.stream()
-                    .map(Permission::getName)
-                    .map(SimpleGrantedAuthority::new)
-                    .toList();
-            /*将角色和授权许可合并到grantedAuthorities列表*/
-            grantedAuthorities.addAll(roleAuthorities);
-            grantedAuthorities.addAll(permissionAuthorities);
-            //设置用户名和密码
-            //设置权限列表
-            return org.springframework.security.core.userdetails
-                    .User.builder()
-                    //设置用户名和密码
-                    .username(u.getUsername())
-                    .password(u.getPassword())
-                    //设置权限列表
-                    .authorities(grantedAuthorities)
-                    .build();
-        }).orElse(null);
+        System.out.println("Loading user details for username: " + username);
+        
+        Optional<User> userOptional = userService.getByUsername(username);
+        if (userOptional.isEmpty()) {
+            System.out.println("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found: " + username);
+        }
+        
+        User user = userOptional.get();
+        System.out.println("Found user: id=" + user.getId() + ", username=" + user.getUsername());
+        
+        // 直接获取用户的角色列表
+        List<Role> roles = userRoleService.getRolesByUserId(user.getId());
+        System.out.println("Found " + roles.size() + " roles for user " + user.getUsername());
+        roles.forEach(role -> System.out.println("Role: id=" + role.getId() + ", name=" + role.getName()));
+        
+        // 批量获取所有角色对应的权限
+        List<Permission> permissions = rolePermissionService.getPermissionsByRoleIds(
+                roles.stream().map(Role::getId).toList());
+        System.out.println("Found " + permissions.size() + " unique permissions for user " + user.getUsername());
+        permissions.forEach(permission -> 
+            System.out.println("Permission: id=" + permission.getId() + ", name=" + permission.getName()));
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>(roles.size() + permissions.size());
+        
+        // 转换角色
+        List<SimpleGrantedAuthority> roleAuthorities = roles.stream()
+                .map(role -> {
+                    String roleName = role.getName().startsWith("ROLE_") ? 
+                            role.getName() : "ROLE_" + role.getName();
+                    System.out.println("Converting role: " + role.getName() + " -> " + roleName);
+                    return roleName;
+                })
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+                
+        // 转换权限
+        List<SimpleGrantedAuthority> permissionAuthorities = permissions.stream()
+                .map(permission -> {
+                    System.out.println("Converting permission: " + permission.getName());
+                    return permission.getName();
+                })
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+
+        grantedAuthorities.addAll(roleAuthorities);
+        grantedAuthorities.addAll(permissionAuthorities);
+        System.out.println("Total authorities granted to user " + user.getUsername() + ": " + grantedAuthorities.size());
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .authorities(grantedAuthorities)
+                .build();
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 public interface PermissionService {
-    List<Permission> getPermissions(@NonNull Long roleId);
+    List<Permission> getPermissions(@NonNull Long id);
 }

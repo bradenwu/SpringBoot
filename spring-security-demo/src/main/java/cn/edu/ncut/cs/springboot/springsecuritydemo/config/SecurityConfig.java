@@ -48,7 +48,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/index", "/home").permitAll()
                         // 设置需要角色的路径，表示访问 /user/manage 这个接口，需要具备 "ROLE_ADMIN" 这个角色
-                        .requestMatchers("/user/manage/**").hasRole("ROLE_ADMIN")
+                        .requestMatchers("/user/manage/**").hasRole("ADMIN")
                         // 设置需要权限许可的路径，表示访问 /user/list 这个接口，需要具有 "user:view" 权限许可
                         .requestMatchers("/user/view").hasAuthority("user:view")
                         .requestMatchers("/verifycode").permitAll()

@@ -16,6 +16,5 @@ spring:
     properties:
       hibernate:
         format_sql: true  # 美化输出SQL语句
-        glob
         hbm2ddl:
           import_files: import.sql #默认情况下，Hibernate 在 Classpath 的根目录中查找指定的 SQL 文件。确保 import.sql 或其他指定文件存在于 resources 文件夹中。

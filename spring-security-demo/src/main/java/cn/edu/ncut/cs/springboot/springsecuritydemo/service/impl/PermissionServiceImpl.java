@@ -14,7 +14,7 @@ public class PermissionServiceImpl implements PermissionService {
     private PermissionRepository permissionRepository;
 
     @Override
-    public List<Permission> getPermissions(Long roleId) {
-        return permissionRepository.getPermissionsById(roleId);
+    public List<Permission> getPermissions(Long id) {
+        return permissionRepository.getPermissionsById(id);
     }
 }
