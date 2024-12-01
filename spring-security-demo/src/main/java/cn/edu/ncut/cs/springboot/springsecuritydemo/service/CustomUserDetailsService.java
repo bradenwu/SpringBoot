@@ -1,7 +1,6 @@
-package cn.edu.ncut.cs.springboot.springsecuritydemo.service.impl;
+package cn.edu.ncut.cs.springboot.springsecuritydemo.service;
 
 import cn.edu.ncut.cs.springboot.springsecuritydemo.entity.*;
-import cn.edu.ncut.cs.springboot.springsecuritydemo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
     @Autowired

@@ -18,7 +18,7 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/manage/{id}")
+    @GetMapping("/view/{id}")
     public JsonResult getUserInfo(@PathVariable("id") Long id) {
         User user = userService.getById(id);
         UserVO userVO = new UserVO();
@@ -29,7 +29,7 @@ public class UserRestController {
         return new JsonResult(JsonResult.JsonResultCode.SUCCESS, "获取数据成功！", userVO);
     }
 
-    @GetMapping("/view")
+    @GetMapping("/list")
     public JsonResult getUserList() {
         try {
             List<UserVO> userList = userService.findAll();

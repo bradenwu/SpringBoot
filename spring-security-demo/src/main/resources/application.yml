@@ -9,12 +9,10 @@ spring:
 
   jpa:
     show-sql: true  # 启用SQL打印
-    open-in-view: false  # 避免视图外懒加载异常，推荐在Hibernate 6中禁用
+    open-in-view: true
     hibernate:
       ddl-auto: create # 设置自动创建数据库表, 仅适用于开发环境，生成环境建议使用update或none
     defer-datasource-initialization: true # 用于控制数据源初始化的时机，延迟数据源初始化，以确保在执行下面的import.sql脚本时，Hibernate已经完成DDL操作并创建了所需的数据库表。
     properties:
       hibernate:
         format_sql: true  # 美化输出SQL语句
-        hbm2ddl:
-          import_files: import.sql #默认情况下，Hibernate 在 Classpath 的根目录中查找指定的 SQL 文件。确保 import.sql 或其他指定文件存在于 resources 文件夹中。
