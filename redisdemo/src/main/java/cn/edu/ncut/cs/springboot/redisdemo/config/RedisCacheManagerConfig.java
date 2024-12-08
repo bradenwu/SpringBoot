@@ -52,17 +52,25 @@ public class RedisCacheManagerConfig {
 
     @Bean
     public CacheManager cacheManager(RedisTemplate<String, Object> template) {
+        // 创建并配置ObjectMapper,确保正确处理类型信息
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL);
+        GenericJackson2JsonRedisSerializer jsonRedisSerializer = new GenericJackson2JsonRedisSerializer(om);
+
         RedisCacheConfiguration defaultCacheConfiguration =
                 RedisCacheConfiguration
                         .defaultCacheConfig()
                         // 设置key为String
                         .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(template.getStringSerializer()))
-                        // 设置value 为自动转Json的Object
-                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(template.getValueSerializer()))
+                        // 设置value序列化方式为GenericJackson2JsonRedisSerializer
+                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jsonRedisSerializer))
                         // 不缓存null
                         .disableCachingNullValues()
-                        // 缓存数据保存1小时
+                        // 缓存数据保存30天
                         .entryTtl(Duration.ofDays(30));
+
         RedisCacheManager redisCacheManager =
                 RedisCacheManager.RedisCacheManagerBuilder
                         // Redis 连接工厂

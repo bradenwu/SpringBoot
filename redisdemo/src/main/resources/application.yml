@@ -5,14 +5,15 @@ spring:
     username: root
     password: 123456
 
-server:
-  servlet:
-    context-path: /
-  port: 8080
-  redis:
-    host: 127.0.0.1
-    port: 6379
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 mybatis:
   type-aliases-package: cn/edu/ncut/cs/springboot/redisdemo/entity
   mapper-locations: classpath:mapper/*Mapper.xml
+
+logging:
+  level:
+    cn.edu.ncut.cs.springboot.redisdemo.mapper.BookMapper: debug

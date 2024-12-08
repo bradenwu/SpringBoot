@@ -20,10 +20,10 @@ public class BookController {
     @GetMapping("/get")
     public Book getBook(Long id){
         if(bookBloomFilter.bloomFilter.mightContain(id)){
-            System.out.println("id为"+id+"的book在数据库中存在");
+            System.out.println("The book of id equals "+id+" exists in db");
             return bookService.getBook(id);
         }else{
-            System.out.println("id为"+id+"的book在数据库中不存在");
+            System.out.println("The book of id equals "+id+" does not exist in db");
             return null;
         }
     }
